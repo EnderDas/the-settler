@@ -11,7 +11,7 @@ Steel
 
 from .frame import Frame as _Frame
 
-class Mod:
+class _Mod:
 
     def __init__(self, **kwargs):
         """
@@ -27,27 +27,27 @@ class Mod:
     def frame(self):
         return _Frame(self).dict
 
-_leather_base = Mod(name="leatherbase", hidden=True, buffs={
+_leather_base = _Mod(name="leatherbase", hidden=True, buffs={
     "protection": 30,
     "resistance": 30
 })
 
-_treatedleather_base = Mod(name="treatedleatherbase", hidden=True, buffs={
+_treatedleather_base = _Mod(name="treatedleatherbase", hidden=True, buffs={
     "protection": 30,
     "resistance": 40
 })
 
-_chainmail_base = Mod(name="chainmailbase", hidden=True, buffs={
+_chainmail_base = _Mod(name="chainmailbase", hidden=True, buffs={
     "protection": 40,
     "resistance": 40
 })
 
-_iron_base = Mod(name="ironbase", hidden=True, buffs={
+_iron_base = _Mod(name="ironbase", hidden=True, buffs={
     "protection": 50,
     "resistance": 50
 })
 
-_steel_base = Mod(name="ironbase", hidden=True, buffs={
+_steel_base = _Mod(name="ironbase", hidden=True, buffs={
     "protection": 60,
     "resistance": 60
 })
@@ -70,7 +70,7 @@ class Armor:
         """
         self.name = kwargs.get("name", "Armor")
         self.type = kwargs.get("type", "leather")
-        self.mods = [Mod(dict(mod)) for mod in kwargs.get("mods", [])]
+        self.mods = [_Mod(dict(mod)) for mod in kwargs.get("mods", [])]
         self.stats = {
             "protection": 0,
             "resistance": 0,
@@ -88,15 +88,15 @@ class Armor:
 
     @property
     def protection(self):
-        return self.stats.protection
+        return self.stats['protection']
 
     @property
     def resistance(self):
-        return self.stats.resistance
+        return self.stats['resistance']
 
     @property
     def power(self):
-        return self.stats.power
+        return self.stats['power']
 
     @property
     def frame(self):

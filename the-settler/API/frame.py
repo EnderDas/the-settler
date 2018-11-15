@@ -14,7 +14,7 @@ class Frame:
         self.dict = {}
         var = vars(self.obj)
         for i in var.keys():
-            if type(var[i]) == type(list()):
+            if isinstance(var[i], list):
                 self.dict[i] = []
                 for k in var[i]:
                     if hasattr(k, 'frame'):
@@ -26,12 +26,14 @@ class Frame:
                     self.dict[i] = var[i].frame
                 except:
                     self.dict[i] = var[i]
+
+    def __repr__(self):
+        return str(self.dict)
+
+
         """self.dict = {
             i: i.frame
                 if hasattr(i, 'frame')
                 else getattr(self.obj, i)
                 for i in vars(self.obj).keys()
         }"""
-
-    def __repr__(self):
-        return str(self.dict)
