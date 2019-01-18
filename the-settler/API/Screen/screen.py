@@ -6,9 +6,8 @@ import msvcrt
 import time
 import win32console
 
-from keyboard import *
-from renderer import *
-from events import *
+from .color import *
+from .renderer import *
 
 colorama.init()
 
@@ -17,11 +16,9 @@ win = WinTerm()
 class Screen:
 
     def __init__(self):
-        self.keyboard = Keyboard(self)
-        self.renderer = Renderer(self)
-
         self.text = ""
         self.back = False
+        self.renderer = Renderer(self)
 
     def cursor_toggle(self, visible):
         console = win32console.CreateConsoleScreenBuffer()
@@ -30,20 +27,14 @@ class Screen:
         else:
             console.SetConsoleCursorInfo(1, False)
 
-    def render(self):
-        pass
+    def render(self, map, player):
+        self.renderer.render_map(map)
+        self.renderer.render_player(map, player)
 
     def cursor(self, x=1, y=1):
         self.cursor_toggle(False)
         win.set_cursor_position((y,x))
         self.cursor_toggle(True)
 
-    def clear(self):
-        """
-        THIS IS NOT GOOD TO USE, USE THIS SCARCELY
-        """
-        os.system('cls')
-
-    def start(self):
-        eventloop = EventLoop(self)
-        eventloop.run()
+    def reset(self):
+        self.cursor()

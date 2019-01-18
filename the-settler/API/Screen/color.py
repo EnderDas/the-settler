@@ -1,4 +1,60 @@
 #color
+"""
+from ctypes import *
+from ctypes import wintypes
+import ctypes
+from win32 import *
+from win32console import *
+import win32api
+import sys
+import os
+
+def _decode_RGB(obj):
+    red = obj & 255
+    green = (obj >> 8) & 255
+    blue = (obj >> 16) & 255
+    return (red, green, blue)
+
+class _COORD(ctypes.Structure):
+    _fields_ = (('X', wintypes.SHORT),
+                ('Y', wintypes.SHORT))
+
+class _CONSOLE_SCREEN_BUFFER_INFOEX(ctypes.Structure):
+    _fields_ = (('cbSize',               wintypes.ULONG),
+                ('dwSize',               _COORD),
+                ('dwCursorPosition',     _COORD),
+                ('wAttributes',          wintypes.WORD),
+                ('srWindow',             wintypes.SMALL_RECT),
+                ('dwMaximumWindowSize',  _COORD),
+                ('wPopupAttributes',     wintypes.WORD),
+                ('bFullscreenSupported', wintypes.BOOL),
+                ('ColorTable',           wintypes.DWORD * 16))
+    def __init__(self, *args, **kwds):
+        super(_CONSOLE_SCREEN_BUFFER_INFOEX, self).__init__(
+                *args, **kwds)
+        self.cbSize = ctypes.sizeof(self)
+
+_PCONSOLE_SCREEN_BUFFER_INFOEX = ctypes.POINTER(_CONSOLE_SCREEN_BUFFER_INFOEX)
+
+class SC_HANDLER:
+
+    def __init__(self):
+        self.buffer = CreateConsoleScreenBuffer()
+        self.infoex = _CONSOLE_SCREEN_BUFFER_INFOEX()
+        self.info = self.buffer.GetConsoleScreenBufferInfo()
+        self.get_infoex()
+
+    def get_infoex(self):
+        windll.kernel32.GetConsoleScreenBufferInfoEx(int(self.buffer), ctypes.byref(self.infoex))
+
+    def set_new_color(self, color, ind):
+        new_info = _CONSOLE_SCREEN_BUFFER_INFOEX()
+        windll.kernel32.GetConsoleScreenBufferInfoEx(int(self.buffer), ctypes.byref(new_info))
+        new_info.ColorTable[ind] = color
+        windll.kernel32.SetConsoleScreenBufferInfoEx(int(self.buffer), new_info)
+        self.get_infoex()
+"""
+
 from colorama import *
 
 init()
@@ -89,3 +145,7 @@ class Color:
         }
 
         return codes
+
+    def __str__(self):
+        l = self.decode()["shade"]+self.decode()["fore"]+self.decode()["back"]
+        return l
