@@ -157,4 +157,11 @@ if __name__ == "__main__":
         map = Map("testing")
         print("Maps working correctly!")
     except:
+        import sys
+        path = __file__.replace("map.py", "")
+        try:
+            map = Map(path+"testing")
+            print("yaya")
+        except:
+            print(":(")
         print(":/")
